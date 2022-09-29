@@ -16,6 +16,10 @@ const reducer = (state, action) => {
       //TODO
       return {
         ...state,
+        user: action.data.user_id,
+        token: action.data.token,
+        role: action.data.role,
+        isAuthenticated: true,
       };
     case "LOGOUT":
       localStorage.clear();
@@ -32,7 +36,7 @@ const reducer = (state, action) => {
 let sdk = new MkdSDK();
 
 export const tokenExpireError = (dispatch, errorMessage) => {
-  const role = localStorage.getItem("role");
+  const role = localStorage.getItem("role") || "admin";
   if (errorMessage === "TOKEN_EXPIRED") {
     dispatch({
       type: "Logout",
@@ -43,6 +47,13 @@ export const tokenExpireError = (dispatch, errorMessage) => {
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  async function checkToken() {
+    const response = await sdk.check("admin");
+    if (response.message) {
+      tokenExpireError(dispatch, response?.message);
+    }
+  }
 
   React.useEffect(() => {
     //TODO

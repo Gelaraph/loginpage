@@ -10,7 +10,7 @@ function renderRoutes(role) {
   switch (role) {
     case "admin":
       return (
-        <Routes>
+        <Routes location={{ pathname: "/admin/login" }}>
           <Route
             path="/admin/dashboard"
             element={<AdminDashboardPage />}

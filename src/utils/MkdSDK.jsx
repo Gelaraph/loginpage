@@ -98,6 +98,14 @@ export default function MkdSDK() {
 
   this.check = async function (role) {
     //TODO
+    const response = await fetch(`${this._baseurl}/v2/api/lambda/check`, {
+      method: "POST",
+      body: JSON.stringify({
+        role,
+      }),
+      headers: this.getHeader(),
+    });
+    return response.json();
   };
 
   return this;

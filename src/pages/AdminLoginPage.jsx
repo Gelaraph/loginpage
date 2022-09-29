@@ -28,6 +28,20 @@ const AdminLoginPage = () => {
   const onSubmit = async (data) => {
     let sdk = new MkdSDK();
     //TODO
+    const { email, password } = data;
+    const response = await sdk.login(email, password, "admin");
+    if (response?.token) {
+      localStorage.setItem("token", response.token);
+      localStorage.setItem("role", response.role);
+      dispatch({
+        type: "LOGIN",
+        data: {
+          ...response,
+        },
+      });
+      showToast(dispatchGlobal, "Login Successful");
+      navigate("/admin/dashboard");
+    }
   };
 
   return (
